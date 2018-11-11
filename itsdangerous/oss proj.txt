@@ -1,0 +1,59 @@
+itsdangerous
+
+pypi를 통하여 패키지 설치 가능
+
+#####Signer : 특정 문장에 서명을 붙일수 있다
+
+>>> from itsdangerous import Signer
+>>> s = Signer('secret-key')
+>>> s.sign('my string')
+'my string.wh6tMHxLgJqB6oY1uT73iMlyrOA'
+
+unsign() 메서드는 이용하여 제거 할수도 있음;
+
+>>> s.unsign('my string.wh6tMHxLgJqB6oY1uT73iMlyrOA')
+'my string'
+
+ #TimestampSigner : Timestamp(시간정보룰 가지고 있음) 서명을 붙일수 있다.
+ unsign 할때 시간정보까지 확인합니다. 시간정보가 맞지 않으면 unsign하지못합니다.
+
+ >>> from itsdangerous import TimestampSigner
+>>> s = TimestampSigner('secret-key')
+>>> string = s.sign('foo')
+>>> s.unsign(string, max_age=5)
+Traceback (most recent call last):
+  ...
+itsdangerous.SignatureExpired: Signature age 15 > 5 seconds
+
+
+#####Serialization (직렬화) : 모듈내에서 String을 다루기 쉽지 않아 바이트 스트림으로 바꾸는 직렬화를 제공한다.
+JSON 형태의 직렬화 인터페이스를 사용할수 있습니다.
+ Serializer 클래스에서 제공한다.
+ 
+ >>> from itsdangerous import Serializer
+>>> s = Serializer('secret-key')
+>>> s.dumps([JSON Form])
+'[1, 2, 3, 4].r7R9RhGgDPvvWl3iNzLuIIfELmo'
+
+위의 unsign() 처럼 loads를 사용하면 올바른 서명을 가지고 있으면 서명을 없앨 수 있습니다.
+>>> s.loads('[JSON Form].r7R9RhGgDPvvWl3iNzLuIIfELmo')
+[JSON Form]
+
+
+시간 정보를 넣고 싶으면 TimedSerializer을 이용하면 된다.! 
+
+
+URL Safe Serialization : 한정된 문자만 사용해야하는 환경에서 신뢰할 수 있는 String을 통과시키고 싶을때 사용합니다.
+JSON 인터페이스를 복호화시키고 String뒤에 서명을 붙입니다.
+
+
+>>> from itsdangerous import URLSafeSerializer
+>>> s = URLSafeSerializer('secret-key')
+>>> s.dumps([1, 2, 3, 4])
+'WzEsMiwzLDRd.wSPHqC0gR7VUqivlSukJ0IeTDgo'
+>>> s.loads('WzEsMiwzLDRd.wSPHqC0gR7VUqivlSukJ0IeTDgo')
+[1, 2, 3, 4]
+
+
+
+
