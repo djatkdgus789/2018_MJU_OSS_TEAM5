@@ -1,0 +1,93 @@
+1. passlib란?
+
+파이썬 2와 파이선 3을 위한 암포 hashing library 
+30개 이상의 암호 hashing 알고리즘에 구현 가능(넓은 범용성) 
+
+예시)
+>>> # import the hash algorithm
+>>> from passlib.hash import pbkdf2_sha256
+
+>>> # generate new salt, and hash a password
+>>> hash = pbkdf2_sha256.hash("toomanysecrets")
+>>> hash
+'$pbkdf2-sha256$29000$N2YMIWQsBWBMae09x1jrPQ$1t8iyB2A.WF/Z5JZv.lfCIhXXN33N23OSgQYThBYRfk'
+
+>>> # verifying the password
+>>> pbkdf2_sha256.verify("toomanysecrets", hash)
+True
+>>> pbkdf2_sha256.verify("joshua", hash)
+False
+
+이 코드는 PBKDF2-SHA256 알고리즘을 사용해 암호를 확인
+
+2. passlib 시작하기
+
+3가지로 나뉘는 시작 방법
+
+1) Walkthrough & Tutorials(연습 및 튜토리얼)
+
+New users in particular will want to visit the walkthrough, as it provides introductory documentation including installation requirements, an overview of what passlib provides, and a guide for getting started quickly.
+
+2) API Reference
+
+The API reference contains a top-down reference of the passlib package.
+
+3) Other Documentation
+
+This section contains additional things that don’t fit anywhere else, including an FAQ and a complete changelog.
+
+3. 구현되는 플랫폼
+
+CPython 2 – v2.6 or newer
+CPython 3 – v3.3 or newer
+PyPy – v2.0 or newer
+PyPy3 – v5.3 or newer
+Jython – v2.7 or newer
+Pyston – v0.5.1 or newer
+
+passlib은 거의 모든 OS 의존적 기능을위한 fallback을 포함하고 있기 때문에 모든 운영체제와 환경에서 작동됨
+
+4. 설치 방법
+
+1) pip 사용
+pip install passlib
+
+2) setup.py 사용
+python setup.py install
+
+5. 도우미
+
+passlib가 사용자가 신속하게 사용할 수 있도록 제공해주는 사전 구성된 cryptContext 인스턴스
+
+passlib.apps – contains pre-configured instances for managing hashes used by Postgres, Mysql, and LDAP, and others.
+passlib.hosts – contains pre-configured instances for managing hashes as found in the /etc/shadow files on Linux and BSD systems.
+passlib.apache – classes for managing htpasswd and htdigest files.
+passlib.ext.django – Django plugin which monkeypatches support for (almost) any hash in Passlib.
+
+6. 사용 방법
+
+먼저 원하는 해시를 가져옵니다. 다음 예제는 PasswordHash 에서 파생 된 pbkdf2_sha256 클래스를 사용합니다.
+
+>>> # import the desired hasher
+>>> from passlib.hash import pbkdf2_sha256
+
+PasswordHash.hash() 를 사용하여 암호를 해시합니다. 이 호출은 유니 코드 인코딩, 기본 라운드 값 선택 및 임의 솔트 생성을 담당합니다.
+
+>>> hash = pbkdf2_sha256.hash("password")
+>>> hash
+'$pbkdf2-sha256$29000$9t7be09prfXee2/NOUeotQ$Y.RDnnq8vsezSZSKy1QNy6xhKPdoBIwc.0XDdRm9sJ8'
+
+각 호출은 새로운 salt를 생성하기 때문에 입력 해와 같은 암호를 사용하더라도 호출간에 결과 해시의 내용이 달라집니다.
+
+>>> hash2 = pbkdf2_sha256.hash("password")
+>>> hash2
+'$pbkdf2-sha256$29000$V0rJeS.FcO4dw/h/D6E0Bg$FyLs7omUppxzXkARJQSl.ozcEOhgp3tNgNsKIAhKmp8'
+                      ^^^^^^^^^^^^^^^^^^^^^^
+                      
+그런 다음 PasswordHash.verify() 를 호출하여 기존 해시와 비교하여 사용자 입력을 확인할 수 있습니다.
+
+>>> pbkdf2_sha256.verify("password", hash)
+True
+>>> pbkdf2_sha256.verify("joshua", hash)
+False
+
