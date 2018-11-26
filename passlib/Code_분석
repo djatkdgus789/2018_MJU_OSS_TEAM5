@@ -1,0 +1,106 @@
+<Htpasswd 파일>
+
+1. path (filepath)
+저장하는 데 사용되는 htpasswd 파일의 경로를 지정합니다.
+2. new (bool)
+일반적으로 path 가 지정되면 HtpasswdFile 은 즉시 파일의 내용을 로드합니다. 그러나 새 htpasswd 파일을 만들 때 응용 프로그램은 new=True 설정하여 기존 파일 (있는 경우)이로드되지 않도록 할 수 있습니다.
+3. autosave (bool)
+일반적으로 HtpasswdFile 인스턴스에 대한 변경은 save() 가 명시 적으로 호출 될 때까지 save() 되지 않습니다. 그러나 autosave=True 를 지정하면 변경된 내용이 즉시 디스크에 저장됩니다 ( 경로 가 설정된 경우).
+4. encoding (str)
+선택적으로 파일 및 해시 암호 읽기 / 쓰기에 사용되는 문자 인코딩을 지정합니다. 기본값은 utf-8 이지만 latin-1 은 일반적으로 발생하는 유일한 인코딩입니다.
+5. default_scheme (str)
+선택적으로 새 암호를 인코딩 할 때 사용할 기본 구성표를 지정합니다.
+6. context (CryptContext) 
+htpasswd 파일에서 발견 된 해시를 만들고 확인하는 데 사용되는 CryptContext 인스턴스입니다.
+7. autoload
+생성자가 디스크에서 파일을 자동으로 로드하지 못하게 하려면 False 로 설정합니다.
+8. default
+새 암호 해시에 사용되는 기본 알고리즘을 변경하십시오
+
+<Load and Saving>
+
+1. method load(path=None, force=True)
+로컬 파일에서 상태를로드하십시오. 경로를 지정하지 않으면 self.path 에서로드를 시도합니다.
+2. method load_if_changed()
+마지막로드 이후 파일이 변경된 경우에만 self.path 에서 다시 로드합니다.
+3. method load_string(data)
+유니 코드 또는 바이트 문자열에서 상태로드, 현재 상태를 바꿉니다. 
+4. method save(path=None)
+현재 상태를 파일에 저장합니다. 경로를 지정하지 않으면 self.path 에 저장하려고 시도합니다.
+5. method to_string()
+현재 상태를 바이트 문자열로 내보냅니다
+
+<Inspection>
+
+1. method users()
+데이터베이스에있는 모든 사용자의 목록을 반환합니다
+2. method check_password(user, password)
+지정된 사용자의 암호를 확인합니다. CryptContext에 의해 비추천 된 것으로 표시된 알고리즘이 자동으로 다시 해시됩니다.
+3. method get_hash(user)
+사용자에 대해 저장된 해시를 반환합니다. 사용자를 찾을 수없는 경우 None을 반환합니다.
+
+<Modification>
+
+1. method set_password(user, password)
+사용자 암호 설정; 필요한 경우 사용자를 추가합니다.
+2. method delete(user)
+사용자 항목을 삭제합니다.
+
+<Passlib.hash>
+
+passlib.hash.bcrypt - BCrypt
+passlib.hash.sha256_crypt - SHA-256 암호문
+passlib.hash.sha512_crypt - SHA-512 Crypt
+passlib.hash.unix_disabled - Unix 사용 불능 계정 도우미
+passlib.hash.bsd_nthash - FreeBSD의 nthash 다이제스트의 MCF 호환 인코딩
+passlib.hash.md5_crypt - MD5 암호문
+passlib.hash.sha1_crypt - SHA-1 암호문
+passlib.hash.sun_md5_crypt - Sun MD5 암호문
+passlib.hash.des_crypt - DES Crypt
+passlib.hash.bsdi_crypt - BSDi 암호문
+passlib.hash.bigcrypt - BigCrypt
+passlib.hash.crypt16 - Crypt16
+passlib.hash.argon2 - Argon2
+passlib.hash.bcrypt_sha256 - BCrypt + SHA256
+passlib.hash.phpass - PHPass의 휴대용 해시
+passlib.hash.pbkdf2_ digest - 일반 PBKDF2 해시
+passlib.hash.scram - SCRAM 해시
+passlib.hash.scrypt - SCrypt
+passlib.hash.apr_md5_crypt - 아파치의 MD5-Crypt 변종
+passlib.hash.cta_pbkdf2_sha1 - Cryptacular의 PBKDF2 해시
+passlib.hash.dlitz_pbkdf2_sha1 - Dwayne Litzenberger의 PBKDF2 해시
+passlib.hash.ldap_md5 - MD5 다이제스트
+passlib.hash.ldap_sha1 - SHA1 다이제스트
+passlib.hash.ldap_salted_md5 - 소금에 절인 MD5 다이제스트
+passlib.hash.ldap_salted_sha1 - 소금에 절인 SHA1 다이제스트
+passlib.hash.ldap_ crypt - LDAP crypt () 래퍼
+passlib.hash.ldap_plaintext - LDAP 인식 passlib.hash.ldap_plaintext 핸들러
+passlib.hash.ldap_hex_md5 - 16 진수로 인코딩 된 MD5 다이제스트
+passlib.hash.ldap_hex_sha1 - 16 진수로 인코딩 된 SHA1 다이제스트
+passlib.hash.ldap_pbkdf2_ digest - 일반 PBKDF2 해시
+passlib.hash.atlassian_pbkdf2_sha1 - Atlassian의 PBKDF2 기반 해시
+passlib.hash.fshp - 안전한 passlib.hash.fshp 된 암호
+passlib.hash.roundup_plaintext - 범인 정의 특정 LDAP 일반 텍스트 처리기
+passlib.hash.mssql2000 - MS SQL 2000 암호 해시
+passlib.hash.mssql2005 - MS SQL 2005 암호 해시
+passlib.hash.mysql323 - MySQL 3.2.3 암호 해시
+passlib.hash.mysql41 - MySQL 4.1 암호 해시
+passlib.hash.postgres_md5 - PostgreSQL MD5 암호 해시
+passlib.hash.oracle10 - Oracle 10g 암호 해시
+passlib.hash.oracle11 - Oracle 11g 암호 해시
+passlib.hash.lmhash - LanManager 해시
+passlib.hash.nthash - Windows 'NT-HASH
+passlib.hash.msdcc - Windows의 도메인 캐시 된 자격 증명
+passlib.hash.msdcc2 - Windows의 도메인 캐시 된 자격 증명 v2
+passlib.hash.md5_crypt - "Type 5"해시는 실제로 표준 Unix MD5-Crypt 해시이며 형식이 동일합니다.
+passlib.hash.cisco_type7 - "유형 7"은 실제로는 해시가 아니라 유휴보기에서 암호를 가릴 수 있도록 설계된 가역적 인 인코딩입니다.
+"유형 8"해시는 PBKDF2-HMAC-SHA256을 기반으로합니다. 현재는 passlib에서 지원하지 않습니다 ( 87 번 문제 ).
+"유형 9"해시는 암호화를 기반으로합니다. 현재는 passlib에서 지원하지 않습니다 ( 87 번 문제 ).
+passlib.hash.cisco_pix - PIX "암호화 된"해시는 간단한 무염의 MD5 기반 알고리즘을 사용합니다.
+passlib.hash.cisco_asa - ASA의 "암호화 된"해시는 PIX에 비슷한 알고리즘을 사용합니다.
+ASA "NT 암호화 된"해시는 passlib.hash.nthash 와 동일하지만 16 진수가 아닌 base64 인코딩을 사용한다는 점만 다릅니다.
+ASA 9.5는 "pbkdf2"해시 (PBKDF2-HMAC-SHA512 기반)에 대한 지원을 추가했습니다. 현재는 passlib에서 지원하지 않습니다.
+passlib.hash.django_ digest - Django 고유의 해시
+passlib.hash.grub_pbkdf2_sha512 - Grub의 PBKDF2 해시
+passlib.hash.hex_ digest - 일반 16 진수 다이제스트
+passlib.hash.plaintext - 일반 텍스트
